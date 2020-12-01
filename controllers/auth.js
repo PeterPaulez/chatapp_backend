@@ -1,6 +1,7 @@
 const { response } = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
+const { generarJWT } = require('../helpers/jwt');
 
 const crearUsuario = async (request, answer = response) => {
     //const email = request.body.email; // Si solo quisieramos el Email
@@ -25,9 +26,13 @@ const crearUsuario = async (request, answer = response) => {
         // Todo ordenadito y bonito, lo guardamos en BBDD
         await usuario.save(); // Promise tipo FUTURE
 
+        // Generamos una JWT para el usuario
+        const token = await generarJWT(usuario.id);
+
         answer.json({
             ok: true,
-            usuario
+            usuario,
+            token
         });
     } catch (error) { 
         answer.status(500).json({
