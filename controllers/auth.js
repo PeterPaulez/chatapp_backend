@@ -78,7 +78,35 @@ const loginUsuario = async (request, answer = response) => {
     }
 }
 
+const renewToken = async(request, answer = response) => {
+    const uid = request.uid;
+    try {
+        console.log('ID '+uid);
+        const usuarioDB = await Usuario.findById({_id: uid});
+        if (!usuarioDB) {
+            return answer.status(404).json({
+                ok: false,
+                msg: 'Usuario no encontrado'
+            });
+        }
+
+        const token = await generarJWT(usuarioDB.id);
+        answer.json({
+            ok: true,
+            usuarioDB,
+            token
+        });
+
+    } catch (error) {
+        return answer.status(500).json({
+            ok: false,
+            msg: 'Se ha roto el login'
+        });   
+    }
+}
+
 module.exports={
     crearUsuario,
-    loginUsuario
+    loginUsuario,
+    renewToken
 }
