@@ -43,6 +43,42 @@ const crearUsuario = async (request, answer = response) => {
 
 }
 
+const loginUsuario = async (request, answer = response) => {
+    const { email, password } = request.body;
+    try {
+        const usuarioDB = await Usuario.findOne({email});
+        if (!usuarioDB) {
+            return answer.status(404).json({
+                ok: false,
+                msg: 'Email no registrado'
+            });
+        }
+
+        // Validar Password
+        const validPassword = bcrypt.compareSync(password, usuarioDB.password);
+        if (!validPassword) {
+            return answer.status(400).json({
+                ok: false,
+                msg: 'Email y Contraseña incorrectos'
+            });
+        }
+
+        const token = await generarJWT(usuarioDB.id);
+        answer.json({
+            ok: true,
+            usuarioDB,
+            token
+        });
+
+    } catch (error) {
+        return answer.status(500).json({
+            ok: false,
+            msg: 'Se ha roto el login'
+        });   
+    }
+}
+
 module.exports={
-    crearUsuario
+    crearUsuario,
+    loginUsuario
 }
