@@ -4,17 +4,17 @@ const { usuarioConectado, usuarioDesconectado } = require('../controllers/socket
 
 // Mensajes de Sockets
 io.on('connection', client => {
-    console.log('Cliente conectado');
+    console.log('Cliente conectando');
 
     //console.log(client.handshake.headers['x-token']);
     const [valido, uid] = comprobarJWT(client.handshake.headers['x-token']);
-    console.log(valido+' = '+uid);
     if (!valido) {
+        console.log('Cliente Terminado sin Token');
         return client.disconnect();
     }
 
     // Cliente conectado y autenticado
-    console.log('Cliente autenticado');
+    console.log('Cliente autenticado: '+uid);
     usuarioConectado(uid);
 
     // Cuando se cierra la conexión

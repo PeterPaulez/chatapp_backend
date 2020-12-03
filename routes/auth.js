@@ -7,7 +7,7 @@ const { crearUsuario, loginUsuario, renewToken } = require('../controllers/auth'
 const { validarCampos, validarJWT } = require('../middlewares/validarRequest');
 const router = Router();
 
-router.post('/usuario/new', [
+router.post('/new', [
     check('email','El Email es obligatorio y debe ser un email').not().isEmpty().isEmail(),
     check('nombre','El Nombre es obligatorio').not().isEmpty().isLength({ min: 3 }),
     check('password','La Contraseña es obligatorio').not().isEmpty().isLength({ min: 6 }),
@@ -15,13 +15,13 @@ router.post('/usuario/new', [
 ],
 crearUsuario);
 
-router.post('/usuario/login', [
+router.post('/login', [
     check('email','El Email es obligatorio y debe ser un email').not().isEmpty().isEmail(),
     check('password','La Contraseña es obligatorio').not().isEmpty().isLength({ min: 6 }),
     validarCampos
 ],
 loginUsuario);
 
-router.get('/usuario/renew', validarJWT, renewToken);
+router.get('/renew', validarJWT, renewToken);
 
 module.exports=router;
