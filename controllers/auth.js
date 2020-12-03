@@ -66,7 +66,7 @@ const loginUsuario = async (request, answer = response) => {
         const token = await generarJWT(usuarioDB.id);
         answer.json({
             ok: true,
-            usuarioDB,
+            usuario: usuarioDB,
             token
         });
 
@@ -93,7 +93,7 @@ const renewToken = async(request, answer = response) => {
         const token = await generarJWT(usuarioDB.id);
         answer.json({
             ok: true,
-            usuarioDB,
+            usuario: usuarioDB,
             token
         });
 
