@@ -2,10 +2,11 @@
     path: /api/chat
 */
 const { Router } = require('express');
-const { getList } = require('../controllers/chat');
+const { getUsuarios, getMensajes } = require('../controllers/chat');
 const { validarJWT } = require('../middlewares/validarRequest');
 const router = Router();
 
-router.get('/list', validarJWT, getList);
+router.get('/list', validarJWT, getUsuarios);
+router.get('/mensajes/:de', validarJWT, getMensajes);
 
 module.exports=router;
