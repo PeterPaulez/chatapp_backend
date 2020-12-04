@@ -1,6 +1,6 @@
 const { comprobarJWT } = require('../helpers/jwt');
 const {io} = require('../index'); // Importar el Exportanción de INDEX
-const { usuarioConectado, usuarioDesconectado } = require('../controllers/socket')
+const { usuarioConectado, usuarioDesconectado, grabarMensaje } = require('../controllers/socket')
 
 // Mensajes de Sockets
 io.on('connection', client => {
@@ -22,10 +22,13 @@ io.on('connection', client => {
     client.join(uid);
 
     // Escuchar del cliente el mensaje personal
-    client.on('mensaje-personal', (payload) => {
+    client.on('mensaje-personal', async (payload) => {
         console.log('mensaje-personal\n========================');
         console.log(payload);
         
+        // Grabamos Mensaje
+        await grabarMensaje(payload); // Solo emitimos cuando grabe los mensajes
+
         // Se lo envio a TODOS los clientes
         io.to(payload.para).emit('mensaje-personal', payload);
     })

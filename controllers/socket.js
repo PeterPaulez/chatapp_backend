@@ -1,4 +1,5 @@
 const Usuario = require('../models/usuario');
+const Mensaje = require('../models/mensaje');
 
 // Ponemos ese ='' para que visualStudio vea que es un string, no importante.
 const usuarioConectado = async (uid = '') => {
@@ -15,7 +16,20 @@ const usuarioDesconectado = async (uid = '') => {
     return usuario;
 }
 
+const grabarMensaje = async ( payload  = {de:'', para:'', mensaje:''}) => {
+    try {
+        const mensaje = new Mensaje(payload);
+        await mensaje.save();
+        console.log(mensaje);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 module.exports = {
     usuarioConectado,
-    usuarioDesconectado
+    usuarioDesconectado,
+    grabarMensaje
 }
